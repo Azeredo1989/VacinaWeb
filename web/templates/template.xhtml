@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view encoding="ISO-8859-1" contentType="text/html">
+        <h:head>
+            <title><ui:insert name="titulo">titulo da pagina</ui:insert></title>
+            <h:outputStylesheet library="css" name="estilos.css"/>
+            <h:outputScript library="js" name="scripts.js"/>
+        </h:head>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" header="Sistema de controle de vacinas" style="text-align: center">
+                <h:form id="menu">
+                    <p:megaMenu>
+                        <p:submenu label="Basicos" rendered="#{controleLogin.usuarioLogado != null and (controleLogin.usuarioLogado.administrador == true)}">   
+                            <p:column>
+                                <p:submenu label="Cadastros">
+                                    <p:menuitem action="#{controleVacina.listar()}" value="Manutençao de Vacinas"
+                                                ajax="false"/>
+                                    <p:menuitem action="#{controleUsuario.listar()}" value="Manutençao de Usuarios"
+                                                ajax="false"/>
+                                    <p:menuitem action="#{controleIdade.listar()}" value="Manutençao de Idades"
+                                                ajax="false"/>
+                                    <p:menuitem action="#{controleCrianca.listar()}" value="Manutençao de Crianças"
+                                                ajax="false"/>
+                                    <p:menuitem action="#{controleVacinacao.listar()}" value="Manutençao de Vacinação"
+                                                ajax="false"/>
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu label="Sua(s) Criança(s)" rendered="#{controleLogin.usuarioLogado != null and controleLogin.usuarioLogado.administrador == false}">
+                            <p:column>
+                                <p:submenu label="Cadastros">
+                                    <p:menuitem action="#{controleCrianca.listar()}" value="Manutençao de Crianças"
+                                            ajax="false"/>
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                            <p:menuitem value="Entrar no sistema" 
+                                        rendered="#{controleLogin.usuarioLogado == null}"
+                                        ajax="false"
+                                        action="#{controleLogin.paginaLogin()}" icon="ui-icon-person" /> 
+                            <p:menuitem value="#{controleLogin.usuarioLogado.login} : Sair do sistema" 
+                                        ajax="false"
+                                        rendered="#{controleLogin.usuarioLogado != null}"
+                                        action="#{controleLogin.efetuarLogout()}" icon="ui-icon-power" />
+                    </p:megaMenu>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <ui:insert name="conteudo">
+
+                </ui:insert>
+            </p:layoutUnit>
+            <ui:insert name="dialogos">
+
+            </ui:insert>
+            <p:layoutUnit position="south">
+                <ui:include src="/templates/ajaxstatus.xhtml"/>
+                <div align="center">Anderson de Azeredo Ribeiro - Aluno do IFSul</div>
+            </p:layoutUnit>
+        </p:layout>
+    </f:view>
+
+</html>
+

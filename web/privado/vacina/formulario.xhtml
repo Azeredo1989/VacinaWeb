@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Edição de Vacinas</ui:define>
+        <ui:define name="conteudo">
+            <h:form>
+                <p:growl/>
+                <div align="center">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <p:outputLabel value="Dados da vacina"/>
+                        </f:facet>
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:commandButton value="Cancelar"
+                                                 action="#{controleVacina.cancelar()}"
+                                                 ajax="false"
+                                                 immediate="true"/>
+                                <p:commandButton value="Salvar" 
+                                                 action="#{controleVacina.salvar()}"
+                                                 ajax="false" icon="ui-icon-disk"/>
+                            </div>
+                        </f:facet>
+                        <p:outputLabel value="ID"/>
+                        <p:inputText value="#{controleVacina.objeto.id}" size="5" readonly="true"/>
+                        <p:outputLabel value="Nome" for="txtNome"/>
+                        <p:inputText value="#{controleVacina.objeto.nome}" id="txtNome" 
+                                     size="50" maxlength="50" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Descrição" for="txtDescricao"/>
+                        <p:inputTextarea value="#{controleVacina.objeto.descricao}" id="txtDescricao" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Mês" for="txtMes"/>
+                        <p:inputText value="#{controleVacina.objeto.mes}" id="txtMes" 
+                                     size="2" maxlength="2" placeholder="Obrigatório"/>
+                    </p:panelGrid>
+                        
+                                 
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

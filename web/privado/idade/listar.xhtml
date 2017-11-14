@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Listagem de Idades</ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem" rendered="#{controleLogin.usuarioLogado != null and (controleLogin.usuarioLogado.administrador == true)}">
+                <p:growl/>
+                <p:commandButton value="Novo" actionListener="#{controleIdade.novo()}"
+                                 icon="ui-icon-plus" oncomplete="PF('dlg').show();"
+                                 update=":formEdicao"/>
+                <div align="center">
+                    <p:panelGrid columns="11">
+                        <p:outputLabel value="Ordem: "/>
+                        <p:selectOneMenu value="#{controleIdade.dao.ordem}">
+                            <f:selectItem itemLabel="Id" itemValue="id"/>
+                            <f:selectItem itemLabel="Descrição" itemValue="descricao"/>
+                            <f:selectItem itemLabel="Mês Inicial" itemValue="mes_inicial"/>
+                            <f:selectItem itemLabel="Mês Final" itemValue="mes_final"/>
+                            <f:selectItem itemLabel="Vacina" itemValue="vacina.nome"/>
+                            <p:ajax update="listagem"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Filtro"/>
+                        <p:inputText value="#{controleIdade.dao.filtro}" size="15">
+                            <p:ajax update="listagem" event="keyup"/>
+                        </p:inputText> 
+                        <p:commandButton value="Filtrar" update="listagem" icon="ui-icon-search"/>
+                        <p:outputLabel value="Máximo de objetos"/>
+                        <p:inputNumber value="#{controleIdade.dao.maximoObjetos}"
+                                       decimalPlaces="0" decimalSeparator="" thousandSeparator=""/>
+                        <p:commandButton value="Primeiro" actionListener="#{controleIdade.dao.primeiro()}"
+                                         icon="ui-icon-seek-first" update="listagem"/>
+                        <p:commandButton value="Anterior" actionListener="#{controleIdade.dao.anterior()}"
+                                         icon="ui-icon-seek-prev" update="listagem"/>
+                        <p:commandButton value="Proximo" actionListener="#{controleIdade.dao.proximo()}"
+                                         icon="ui-icon-seek-next" update="listagem"/>
+                        <p:commandButton value="Ultimo" actionListener="#{controleIdade.dao.ultimo()}"
+                                         icon="ui-icon-seek-end" update="listagem"/>
+                    </p:panelGrid>
+                </div>
+                <p:dataTable value="#{controleIdade.dao.listaObjetos}" var="obj" id="listagem">
+                    <f:facet name="footer">
+                        <p:outputLabel value="#{controleIdade.dao.mensagemNavegacao}"/>
+                    </f:facet>
+                    <p:column headerText="Id">
+                        <p:outputLabel value="#{obj.id}"/>
+                    </p:column>
+                    <p:column headerText="Descrição">
+                        <p:outputLabel value="#{obj.descricao}"/>
+                    </p:column>
+                    <p:column headerText="Mês Inicial">
+                        <p:outputLabel value="#{obj.mes_inicial}"/>
+                    </p:column>
+                    <p:column headerText="Mês Final">
+                        <p:outputLabel value="#{obj.mes_final}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <div align="center">
+                            <p:commandButton actionListener="#{controleIdade.editar(obj.id)}"
+                                             icon="ui-icon-pencil"
+                                             title="Editar"
+                                             oncomplete="PF('dlg').show();"
+                                             update=":formEdicao"/>
+                            <p:commandButton actionListener="#{controleIdade.remover(obj.id)}"
+                                             icon="ui-icon-trash" title="Remover"
+                                             update="@form"
+                                             onclick="if (!confirm('Confirma exclusao?'))
+                                                         return false"/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog widgetVar="dlg" header="Edição" modal="true" resizable="false" width="60%" height="450">
+                <h:form id="formEdicao">
+                    <p:growl id="growl"/>
+                    <p:tabView id="tab">
+                        <p:tab title="Dados principais">
+                            <div align="center">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="footer">
+                                        <div align="center">
+                                            <p:commandButton value="Salvar"
+                                                             icon="ui-icon-disk"
+                                                             actionListener="#{controleIdade.salvar()}"
+                                                             oncomplete="if(!args.validationFailed){PF('dlg').hide();}"
+                                                             update=":formEdicao :formListagem"/>
+                                        </div>
+                                    </f:facet>
+                                    <p:outputLabel value="ID"/>
+                                    <p:inputText value="#{controleIdade.objeto.id}" readonly="true" size="5"/>
+                                    <p:outputLabel value="Descrição" for="txtDescricao"/>
+                                    <p:inputText id="txtDescricao" value="#{controleIdade.objeto.descricao}" size="50" maxlength="50"
+                                                 placeholder="Obrigatório"/>
+                                    <p:outputLabel value="Mês Inicial" for="txtMes_inicial"/>
+                                    <p:inputText id="txtMes_inicial" value="#{controleIdade.objeto.mes_inicial}" size="3" maxlength="3"
+                                                 placeholder="Obrigatório"/>
+                                    <p:outputLabel value="Mês Final" for="txtMes_final"/>
+                                    <p:inputText id="txtMes_final" value="#{controleIdade.objeto.mes_final}" size="3" maxlength="3"
+                                                 placeholder="Obrigatório"/>
+                                </p:panelGrid>
+                            </div>
+                        </p:tab>
+                        <p:tab title="Vacinas">
+                            <p:dataTable value="#{controleIdade.objeto.vacinas}" var="vac"
+                                         rowIndexVar="idx" id="listaVacinas">
+                                <f:facet name="header">
+                                    <p:selectOneMenu id="selectVacina" value="#{controleIdade.vacina}">
+                                        <f:converter converterId="converterVacina"/>
+                                        <f:selectItems value="#{controleIdade.daoVacina.listaTodos}"
+                                                       var="v" itemLabel="#{v.nome}"/>
+                                    </p:selectOneMenu>
+                                    <div align="center">
+                                        <p:commandButton id="btnSalvarVacina" value="Salvar"
+                                                         icon="ui-icon-disk"
+                                                         actionListener="#{controleIdade.salvarVacina()}"
+                                                         update=":formEdicao:tab:listaVacinas "
+                                                         process="@form"
+                                                         />
+                                    </div>                                    
+                                </f:facet>
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{vac.id}"/>
+                                </p:column>
+                                <p:column headerText="Nome">
+                                    <p:outputLabel value="#{vac.nome}"/>
+                                </p:column>
+                                <p:column headerText="Descrição">
+                                    <p:outputLabel value="#{vac.descricao}"/>
+                                </p:column>
+                                <p:column headerText="Mês">
+                                    <p:outputLabel value="#{vac.mes}"/>
+                                </p:column>
+                                <p:column headerText="Ações">
+                                    <div align="center">                                      
+                                        <p:commandButton id="btnRemoverVacina"
+                                                         icon="ui-icon-trash" title="Remover"
+                                                         actionListener="#{controleIdade.removerVacina(idx)}"
+                                                         update="listaVacinas :formEdicao:growl" process="btnRemoverVacina"
+                                                         onclick="if (!confirm('Confirma exclusao da vacina?'))
+                                                                     return false"/>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                    <ui:include src="/templates/ajaxstatus.xhtml"/>
+                </h:form>
+            </p:dialog>
+            <p:dialog header="Seleção de Vacinas" widgetVar="dlgVacinas" resizable="false" modal="true">
+                <h:form id="formVacina">
+                    <p:growl/>
+                    <p:panelGrid columns="2">
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:outputLabel value="Vacina" for="selectVacina"/>
+                                <p:selectOneMenu id="selectVacina" value="#{controleIdade.vacina}">
+                                    <f:converter converterId="converterVacina"/>
+                                    <f:selectItem noSelectionOption="true" itemLabel="Selecione uma vacina"/>
+                                    <f:selectItems value="#{controleIdade.daoVacina.listaTodos}"
+                                                   var="v" itemLabel="#{v.nome}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton id="btnSalvarVacina" value="Salvar"
+                                                 icon="ui-icon-disk"
+                                                 actionListener="#{controleIdade.salvarVacina()}"
+                                                 update=":formEdicao:tab:listaVacinas formVacina"
+                                                 process="@form"
+                                                 oncomplete="if(!args.validationFailed) {PF('dlgVacinas').hide();}"/>
+                            </div>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+

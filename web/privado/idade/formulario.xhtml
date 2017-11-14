@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Edição de criança</ui:define>
+        <ui:define name="conteudo">
+            <h:form>
+                <p:growl/>
+                <div align="center">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <p:outputLabel value="Informações de criança"/>
+                        </f:facet>
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:commandButton value="Cancelar"
+                                                 action="#{controleCrianca.cancelar()}"
+                                                 ajax="false"
+                                                 immediate="true"/>
+                                <p:commandButton value="Salvar" 
+                                                 action="#{controleCrianca.salvar()}"
+                                                 ajax="false" icon="ui-icon-disk"/>
+                            </div>
+                        </f:facet>
+                        <p:outputLabel value="ID"/>
+                        <p:inputText value="#{controleCrianca.objeto.id}" size="5" readonly="true"/>
+                        <p:outputLabel value="Nome" for="txtNome"/>
+                        <p:inputText value="#{controleCrianca.objeto.nome}" id="txtNome" 
+                                    size="50" maxlength="50" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Nascimento" for="txtNascimento"/>
+                        <p:calendar id="txtNascimento" value="#{controleCrianca.objeto.nascimento}"
+                                    mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                            <f:converter converterId="converterCalendar"/>
+                        </p:calendar>
+                        <p:outputLabel value="Sexo" for="txtSexo"/>
+                        <p:inputText value="#{controleCrianca.objeto.sexo}" id="txtSexo" 
+                                     size="10" maxlength="10" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Nome dos Pais" for="txtNomePais"/>
+                        <p:inputText value="#{controleCrianca.objeto.nomePais}" id="txtNomePais" 
+                                     size="50" maxlength="50" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Usuario" for="txtUsuario"/>
+                        <p:inputText value="#{controleCrianca.objeto.usuario}" id="txtUsuario"
+                                     size="20" maxlength="20" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Vacinação" for="txtVacinacao"/>
+                        <p:inputText value="#{controleCrianca.objeto.vacinacao}" id="txtVacinacao"
+                                     size="20" maxlength="20" placeholder="Obrigatório"/>
+                    </p:panelGrid>
+
+
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

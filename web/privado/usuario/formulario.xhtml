@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Edição de Usuarios</ui:define>
+        <ui:define name="conteudo">
+            <h:form>
+                <p:growl/>
+                <div align="center">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <p:outputLabel value="Dados do usuario"/>
+                        </f:facet>
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:commandButton value="Cancelar"
+                                                 action="#{controleUsuario.cancelar()}"
+                                                 ajax="false"
+                                                 immediate="true"/>
+                                <p:commandButton value="Salvar" 
+                                                 action="#{controleUsuario.salvar()}"
+                                                 ajax="false" icon="ui-icon-disk"/>
+                            </div>
+                        </f:facet>
+                        <p:outputLabel value="ID"/>
+                        <p:inputText value="#{controleUsuario.objeto.id}" size="5" readonly="true"/>
+                        <p:outputLabel value="Login" for="txtLogin"/>
+                        <p:inputText value="#{controleUsuario.objeto.login}" id="txtLogin" 
+                                     size="50" maxlength="50" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Senha" for="txtSenha"/>
+                        <p:password value="#{controleUsuario.objeto.senha}" id="txtSenha" 
+                                     size="10" maxlength="10" placeholder="Obrigatório"
+                                     redisplay="true"
+                                     feedback="true"
+                                     weakLabel="Senha fraca"
+                                     strongLabel="Senha forte"
+                                     goodLabel="Senha boa"/>
+                        <p:outputLabel value="E-mail" for="txtEmail"/>
+                        <p:inputText value="#{controleUsuario.objeto.email}" id="txtEmail" 
+                                     size="100" maxlength="100" placeholder="Obrigatório"/>
+                        <p:outputLabel value="Telefone" for="txtTelefone"/>
+                        <p:inputMask value="#{controleUsuario.objeto.telefone}" id="txtTelefone"
+                                     mask="(99)99999-9999"
+                                     size="14" maxlength="12"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel value="Admistrador" for="txtAdministrador"/>
+                        <h:selectOneRadio value="#{controleUsuario.objeto.administrador}" id="txtAdministrador">
+                            <f:selectItem itemLabel="Sim" itemValue="true" />
+                            <f:selectItem itemLabel="Não" itemValue="false"/>
+                        </h:selectOneRadio>  
+                        <p:outputLabel value="Ativo" for="txtAtivo"/>
+                        <h:selectOneRadio value="#{controleUsuario.objeto.ativo}" id="txtAtivo">
+                            <f:selectItem itemLabel="Sim" itemValue="true" />
+                            <f:selectItem itemLabel="Não" itemValue="false"/>
+                        </h:selectOneRadio>  
+                    </p:panelGrid>
+                        
+                                 
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+
