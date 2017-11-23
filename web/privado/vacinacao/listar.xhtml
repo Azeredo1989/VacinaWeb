@@ -135,15 +135,7 @@
                                       itemLabel="Selecione um registro"/>
                                         <f:selectItems value="#{controleVacinacao.dao.listaTodos}"
                                                        var="c" itemLabel="#{c.nome}"/>
-                                    </p:selectOneMenu>
-                                    <p:outputLabel for="cbxSetor" value="Setor"/>
-                    <p:selectOneMenu id="cbxSetor" value="#{controleProjeto.objeto.setor}">
-                        <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
-                        <f:selectItems value="#{controleProjeto.daoSetor.listaTodos}"
-                                       var="s"
-                                       itemLabel="#{s.nome}"/>
-                        <f:converter converterId="converterSetor"/>
-                    </p:selectOneMenu>
+                                    </p:selectOneMenu>                                
                                 </p:panelGrid>
                             </div>
                         </p:tab>
