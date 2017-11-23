@@ -14,12 +14,12 @@
                         <p:growl id="growLogin"/>
                         <p:focus for="txtUsuario"/>
                         <p:panelGrid columns="2">
-                            <p:outputLabel for="txtUsuario" value="usuario"/>
+                            <p:outputLabel for="txtUsuario" value="Usuário"/>
                             <p:inputText id="txtUsuario"
                                          value="#{controleLogin.usuario}"
                                          placeholder="Obrigatório"
                                          required="true"
-                                         requiredMessage="O Usuario deve ser informado"/>
+                                         requiredMessage="O usuário deve ser informado"/>
                             <p:outputLabel value="Senha" for="txtSenha"/>
                             <p:password id="txtSenha"
                                         value="#{controleLogin.senha}"

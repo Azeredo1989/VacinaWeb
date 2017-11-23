@@ -8,9 +8,11 @@ package br.edu.ifsul.controle;
 import br.edu.ifsul.dao.CriancaDAO;
 import br.edu.ifsul.dao.UsuarioDAO;
 import br.edu.ifsul.dao.VacinaDAO;
+import br.edu.ifsul.dao.VacinacaoDAO;
 import br.edu.ifsul.modelo.Crianca;
 import br.edu.ifsul.modelo.Usuario;
 import br.edu.ifsul.modelo.Vacina;
+import br.edu.ifsul.modelo.Vacinacao;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
@@ -31,6 +33,8 @@ public class ControleCrianca implements Serializable{
     private Crianca objeto;
     private VacinaDAO<Vacina> daoVacina;
     private Vacina vacina;
+    private VacinacaoDAO<Vacinacao> daoVacinacao;
+    private Vacinacao vacinacao;
     private UsuarioDAO<Usuario> daoUsuario;
     private Usuario usuario;
     @ManagedProperty(value = "#{controleLogin}")
@@ -48,22 +52,21 @@ public class ControleCrianca implements Serializable{
     }
     
     
-//    public void adicionarVacinacao(){
-//        if(vacina != null){
-//            if(!objeto.getVacinacao().contains(vacina)){
-//                objeto.getVacinacao().add(vacina);
-//            }else{
-//                Util.mensagemErro("Esta vacina já existe na lista");
-//            }
-//        }
-//    }
+    public void adicionarVacinacao(){
+        if(vacina != null){
+            if(!objeto.getVacinacao().contains(vacina)){
+                objeto.getVacinacao().add(vacinacao);
+            }else{
+                Util.mensagemErro("Esta vacina já existe na lista");
+            }
+        }
+    }
     
     public String listar(){
         return "/privado/crianca/listar?faces-redirect=true";
     }
-    public String novo(){
+    public void novo(){
         objeto = new Crianca();
-        return "formulario?faces-redirect=true";
     }
     public String salvar(){
         boolean persistiu = false;
@@ -81,13 +84,17 @@ public class ControleCrianca implements Serializable{
             return "formulario?faces-redirect=true";
         }
     }
+    public void salvarVacina(){
+            objeto.adicionarVacinacao(vacinacao);
+        Util.mensagemInformacao("Vacinacao persistida com sucesso!");
+    }
     
     public String cancelar(){
         return "listar?faces-redirect=true";
     }
-    public String editar(Integer id){
+    public void editar(Integer id){
         objeto = dao.localizar(id);
-        return "formulario?faces-redirect=true";
+        
     }
     public void remover(Integer id){
         objeto = dao.localizar(id);
@@ -194,6 +201,34 @@ public class ControleCrianca implements Serializable{
      */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * @return the daoVacinacao
+     */
+    public VacinacaoDAO<Vacinacao> getDaoVacinacao() {
+        return daoVacinacao;
+    }
+
+    /**
+     * @param daoVacinacao the daoVacinacao to set
+     */
+    public void setDaoVacinacao(VacinacaoDAO<Vacinacao> daoVacinacao) {
+        this.daoVacinacao = daoVacinacao;
+    }
+
+    /**
+     * @return the vacinacao
+     */
+    public Vacinacao getVacinacao() {
+        return vacinacao;
+    }
+
+    /**
+     * @param vacinacao the vacinacao to set
+     */
+    public void setVacinacao(Vacinacao vacinacao) {
+        this.vacinacao = vacinacao;
     }
     
 }

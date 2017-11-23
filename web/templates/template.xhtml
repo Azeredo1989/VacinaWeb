@@ -15,7 +15,8 @@
             <p:layoutUnit position="north" header="Sistema de controle de vacinas" style="text-align: center">
                 <h:form id="menu">
                     <p:megaMenu>
-                        <p:submenu label="Basicos" rendered="#{controleLogin.usuarioLogado != null and (controleLogin.usuarioLogado.administrador == true)}">   
+                        <p:submenu label="Basicos" rendered="#{controleLogin.usuarioLogado != null and (
+                                                               controleLogin.usuarioLogado.administrador == true)}">   
                             <p:column>
                                 <p:submenu label="Cadastros">
                                     <p:menuitem action="#{controleVacina.listar()}" value="Manutençao de Vacinas"
@@ -31,7 +32,8 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu label="Sua(s) Criança(s)" rendered="#{controleLogin.usuarioLogado != null and controleLogin.usuarioLogado.administrador == false}">
+                        <p:submenu label="Sua(s) Criança(s)" rendered="#{controleLogin.usuarioLogado != null and 
+                                                                         controleLogin.usuarioLogado.administrador == false}">
                             <p:column>
                                 <p:submenu label="Cadastros">
                                     <p:menuitem action="#{controleCrianca.listar()}" value="Manutençao de Crianças"

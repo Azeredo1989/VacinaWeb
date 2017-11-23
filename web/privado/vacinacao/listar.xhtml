@@ -5,7 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:composition template="/templates/template.xhtml">
+    <ui:composition template="/templates/template.xhtml">
         <ui:define name="titulo">Listagem de vacinação</ui:define>
         <ui:define name="conteudo">
             <h:form id="formListagem" rendered="#{controleLogin.usuarioLogado != null and (controleLogin.usuarioLogado.administrador == true)}">
@@ -68,6 +68,9 @@
                     <p:column headerText="Profissional">
                         <p:outputLabel value="#{obj.profissional}"/>
                     </p:column>
+                    <p:column headerText="Criança">
+                        <p:outputLabel value="#{obj.crianca.nome}"/>
+                    </p:column>
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton actionListener="#{controleVacinacao.editar(obj.id)}"
@@ -86,7 +89,7 @@
             </h:form>            
         </ui:define>
         <ui:define name="dialogos">
-            <p:dialog widgetVar="dlg" header="Edição" modal="true" resizable="false" width="60%" height="450">
+            <p:dialog widgetVar="dlg" header="Edição de Vacinação" modal="true" resizable="false" width="60%" height="450">
                 <h:form id="formEdicao">
                     <p:growl id="growl"/>
                     <p:tabView id="tab">
@@ -120,11 +123,27 @@
                                     <p:outputLabel value="Unidade" for="txtUnidade"/>
                                     <p:inputText id="txtUnidade" value="#{controleVacinacao.objeto.unidade}" size="50" 
                                                  maxlength="50"
-                                                 placeholder="Obrigatório"/>
+                                                 />
                                     <p:outputLabel value="Profissional" for="txtProfissional"/>
                                     <p:inputText id="txtProfissional" value="#{controleVacinacao.objeto.profissional}" size="50" 
                                                  maxlength="50"
-                                                 placeholder="Obrigatório"/>
+                                                 />
+                                    <p:outputLabel value="Criança" for="selectCrianca"/>
+                                    <p:selectOneMenu id="selectCrianca" value="#{controleVacinacao.objeto.crianca}">
+                                        <f:converter converterId="converterCrianca"/>
+                                        <f:selectItem noSelectionOption="true"
+                                      itemLabel="Selecione um registro"/>
+                                        <f:selectItems value="#{controleVacinacao.dao.listaTodos}"
+                                                       var="c" itemLabel="#{c.nome}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="cbxSetor" value="Setor"/>
+                    <p:selectOneMenu id="cbxSetor" value="#{controleProjeto.objeto.setor}">
+                        <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                        <f:selectItems value="#{controleProjeto.daoSetor.listaTodos}"
+                                       var="s"
+                                       itemLabel="#{s.nome}"/>
+                        <f:converter converterId="converterSetor"/>
+                    </p:selectOneMenu>
                                 </p:panelGrid>
                             </div>
                         </p:tab>

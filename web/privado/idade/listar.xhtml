@@ -10,7 +10,7 @@
         <ui:define name="conteudo">
             <h:form id="formListagem" rendered="#{controleLogin.usuarioLogado != null and (controleLogin.usuarioLogado.administrador == true)}">
                 <p:growl/>
-                <p:commandButton value="Novo" actionListener="#{controleIdade.novo()}"
+                <p:commandButton value="Novo" actionListener="#{controleIdade.nova()}"
                                  icon="ui-icon-plus" oncomplete="PF('dlg').show();"
                                  update=":formEdicao"/>
                 <div align="center">
@@ -76,22 +76,13 @@
             </h:form>
         </ui:define>
         <ui:define name="dialogos">
-            <p:dialog widgetVar="dlg" header="Edição" modal="true" resizable="false" width="60%" height="450">
+            <p:dialog widgetVar="dlg" header="Edição de Idades" modal="true" resizable="false" width="60%" height="450">
                 <h:form id="formEdicao">
                     <p:growl id="growl"/>
                     <p:tabView id="tab">
                         <p:tab title="Dados principais">
                             <div align="center">
                                 <p:panelGrid columns="2">
-                                    <f:facet name="footer">
-                                        <div align="center">
-                                            <p:commandButton value="Salvar"
-                                                             icon="ui-icon-disk"
-                                                             actionListener="#{controleIdade.salvar()}"
-                                                             oncomplete="if(!args.validationFailed){PF('dlg').hide();}"
-                                                             update=":formEdicao :formListagem"/>
-                                        </div>
-                                    </f:facet>
                                     <p:outputLabel value="ID"/>
                                     <p:inputText value="#{controleIdade.objeto.id}" readonly="true" size="5"/>
                                     <p:outputLabel value="Descrição" for="txtDescricao"/>
@@ -103,7 +94,7 @@
                                     <p:outputLabel value="Mês Final" for="txtMes_final"/>
                                     <p:inputText id="txtMes_final" value="#{controleIdade.objeto.mes_final}" size="3" maxlength="3"
                                                  placeholder="Obrigatório"/>
-                                </p:panelGrid>
+                                </p:panelGrid>                                    
                             </div>
                         </p:tab>
                         <p:tab title="Vacinas">
@@ -112,6 +103,8 @@
                                 <f:facet name="header">
                                     <p:selectOneMenu id="selectVacina" value="#{controleIdade.vacina}">
                                         <f:converter converterId="converterVacina"/>
+                                        <f:selectItem noSelectionOption="true"
+                                                      itemLabel="Selecione um registro"/>
                                         <f:selectItems value="#{controleIdade.daoVacina.listaTodos}"
                                                        var="v" itemLabel="#{v.nome}"/>
                                     </p:selectOneMenu>
@@ -120,35 +113,43 @@
                                                          icon="ui-icon-disk"
                                                          actionListener="#{controleIdade.salvarVacina()}"
                                                          update=":formEdicao:tab:listaVacinas "
-                                                         process="@form"
-                                                         />
+                                                         process="@form"/>
                                     </div>                                    
                                 </f:facet>
-                                <p:column headerText="ID">
-                                    <p:outputLabel value="#{vac.id}"/>
-                                </p:column>
-                                <p:column headerText="Nome">
-                                    <p:outputLabel value="#{vac.nome}"/>
-                                </p:column>
-                                <p:column headerText="Descrição">
-                                    <p:outputLabel value="#{vac.descricao}"/>
-                                </p:column>
-                                <p:column headerText="Mês">
-                                    <p:outputLabel value="#{vac.mes}"/>
-                                </p:column>
-                                <p:column headerText="Ações">
-                                    <div align="center">                                      
-                                        <p:commandButton id="btnRemoverVacina"
-                                                         icon="ui-icon-trash" title="Remover"
-                                                         actionListener="#{controleIdade.removerVacina(idx)}"
-                                                         update="listaVacinas :formEdicao:growl" process="btnRemoverVacina"
-                                                         onclick="if (!confirm('Confirma exclusao da vacina?'))
+                                <div align="center">
+                                    <p:column headerText="ID">
+                                        <p:outputLabel value="#{vac.id}"/>
+                                    </p:column>
+                                    <p:column headerText="Nome">
+                                        <p:outputLabel value="#{vac.nome}"/>
+                                    </p:column>
+                                    <p:column headerText="Descrição">
+                                        <p:outputLabel value="#{vac.descricao}"/>
+                                    </p:column>
+                                    <p:column headerText="Mês">
+                                        <p:outputLabel value="#{vac.mes}"/>
+                                    </p:column>
+                                    <p:column headerText="Ações">
+                                        <div align="center">                                      
+                                            <p:commandButton id="btnRemoverVacina"
+                                                             icon="ui-icon-trash" title="Remover"
+                                                             actionListener="#{controleIdade.removerVacina(idx)}"
+                                                             update="listaVacinas :formEdicao:growl" process="btnRemoverVacina"
+                                                             onclick="if (!confirm('Confirma exclusao da vacina?'))
                                                                      return false"/>
-                                    </div>
-                                </p:column>
+                                        </div>
+                                    </p:column>
+                                </div>
                             </p:dataTable>
                         </p:tab>
                     </p:tabView>
+                    <div align="center">
+                        <p:commandButton value="Salvar"
+                                         icon="ui-icon-disk"
+                                         actionListener="#{controleIdade.salvar()}"
+                                         oncomplete="if(!args.validationFailed){PF('dlg').hide();}"
+                                         update=":formEdicao :formListagem"/>
+                    </div>
                     <ui:include src="/templates/ajaxstatus.xhtml"/>
                 </h:form>
             </p:dialog>

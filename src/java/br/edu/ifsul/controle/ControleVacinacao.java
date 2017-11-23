@@ -6,9 +6,12 @@
 package br.edu.ifsul.controle;
 
 import br.edu.ifsul.dao.VacinacaoDAO;
+import br.edu.ifsul.modelo.Crianca;
+import br.edu.ifsul.modelo.Vacina;
 import br.edu.ifsul.modelo.Vacinacao;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -18,52 +21,60 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name = "controleVacinacao")
 @SessionScoped
-public class ControleVacinacao implements Serializable{
+public class ControleVacinacao implements Serializable {
+
+    
     private VacinacaoDAO<Vacinacao> dao;
     private Vacinacao objeto;
-    
-    public ControleVacinacao(){
+    private Crianca crianca;
+    Boolean novaVacinacao;
+
+    public ControleVacinacao() {
         dao = new VacinacaoDAO<>();
     }
-    
-    public String listar(){
+
+    public String listar() {
         return "/privado/vacinacao/listar?faces-redirect=true";
     }
-    public String novo(){
+
+    public void novo() {
         objeto = new Vacinacao();
-        return "formulario?faces-redirect=true";
     }
-    public String salvar(){
+
+    public String salvar() {
         boolean persistiu = false;
-        if(objeto.getId()== null){
+        if (objeto.getId() == null) {
             persistiu = dao.persist(objeto);
-        }else{
+        } else {
             persistiu = dao.merge(objeto);
         }
-        if(persistiu){
+        if (persistiu) {
             Util.mensagemInformacao(dao.getMensagem());
             return "listar?faces-redirect=true";
-        }else {
+        } else {
             Util.mensagemErro(dao.getMensagem());
             return "formulario?faces-redirect=true";
         }
     }
-    
-    public String cancelar(){
+
+    public String cancelar() {
         return "listar?faces-redirect=true";
     }
-    public String editar(Integer id){
+
+    public void editar(Integer id) {
         objeto = dao.localizar(id);
-        return "formulario?faces-redirect=true";
     }
-    public void remover(Integer id){
+
+    public void remover(Integer id) {
         objeto = dao.localizar(id);
-        if(dao.remove(objeto)){
+        if (dao.remove(objeto)) {
             Util.mensagemInformacao(dao.getMensagem());
-        }else{
+        } else {
             Util.mensagemErro(dao.getMensagem());
         }
     }
+    
+    
 
     /**
      * @return the dao
@@ -92,5 +103,25 @@ public class ControleVacinacao implements Serializable{
     public void setObjeto(Vacinacao objeto) {
         this.objeto = objeto;
     }
+
+    /**
+     * @return the crianca
+     */
+    public Crianca getCrianca() {
+        return crianca;
+    }
+
+    /**
+     * @param crianca the crianca to set
+     */
+    public void setCrianca(Crianca crianca) {
+        this.crianca = crianca;
+
+    }
+
+    /**
+     * @return the daoVacinacao
+     */
     
+
 }

@@ -9,10 +9,10 @@
         <ui:define name="titulo">Listagem de Criancas</ui:define>
         <ui:define name="conteudo">
             <h:form id="formListagem">
-                <p:messages/>
                 <p:growl/>
                 <p:commandButton value="Novo" action="#{controleCrianca.novo()}"
-                                 ajax="false" icon="ui-icon-plus"/>
+                                 icon="ui-icon-plus" oncomplete="PF('dlg').show();"
+                                 update=":formEdicao"/>
                 <div align="center">
                     <p:panelGrid columns="11">
                         <p:outputLabel value="Ordem: "/>
@@ -63,14 +63,13 @@
                     <p:column headerText="Usuarios">
                         <p:outputLabel value="#{obj.usuario.login}"/>
                     </p:column>
-                    <p:column headerText="Vacinacao">
-                        <p:outputLabel value="#{obj.vacinacao}"/>
-                    </p:column>
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton action="#{controleCrianca.editar(obj.id)}"
-                                             ajax="false" icon="ui-icon-pencil"
-                                             title="Editar"/>
+                                             icon="ui-icon-pencil"
+                                             title="Editar"
+                                             oncomplete="PF('dlg').show();"
+                                             update=":formEdicao"/>
                             <p:commandButton actionListener="#{controleCrianca.remover(obj.id)}"
                                              icon="ui-icon-trash" title="Remover"
                                              update="@form"
@@ -82,7 +81,7 @@
             </h:form>
         </ui:define>
         <ui:define name="dialogos">
-            <p:dialog widgetVar="dlg" header="Edição" modal="true" resizable="false" width="60%" height="450">
+            <p:dialog widgetVar="dlg" header="Edição de Crianças" modal="true" resizable="false" width="60%" height="450">
                 <h:form id="formEdicao">
                     <p:growl id="growl"/>
                     <p:tabView id="tab">
@@ -114,16 +113,91 @@
                                     <p:outputLabel value="Nome dos Pais" for="txtNomePais"/>
                                     <p:inputText value="#{controleCrianca.objeto.nomePais}" id="txtNomePais" 
                                                  size="100" maxlength="100" placeholder="Obrigatório"/>
-                                    
+
                                 </p:panelGrid>
                             </div>
                         </p:tab>
-                        
+                        <p:tab title="Vacinação">
+                            <p:dataTable value="#{controleCrianca.objeto.vacinacao}" var="cri"
+                                         rowIndexVar="idx" id="listaVacinacao">
+                                <f:facet name="header">
+                                    <p:selectOneMenu id="selectVacina" value="#{controleCrianca.vacina}">
+                                        <f:selectItems value="#{controleVacina.dao.listaTodos}"
+                                                       var="v" itemLabel="#{v.nome}"/>
+                                    </p:selectOneMenu>
+                                    <div align="center">
+                                        <p:commandButton id="btnSalvarVacina" value="Salvar"
+                                                         icon="ui-icon-disk"
+                                                         actionListener="#{controleCrianca.adicionarVacinacao()}"
+                                                         update=":formEdicao:tab:listaVacinacao"
+                                                         process="@form"/>
+                                    </div>                                    
+                                </f:facet>
+                                <div align="center">
+                                    <p:panelGrid columns="2">
+
+                                        <f:facet name="footer">
+                                            <div align="center">
+                                                <p:commandButton value="Salvar"
+                                                                 icon="ui-icon-disk"
+                                                                 actionListener="#{controleCrianca.salvar()}"
+                                                                 oncomplete="if(!args.validationFailed){PF('dlg').hide();}"
+                                                                 update=":formEdicao :formListagem"/>
+                                            </div>
+                                        </f:facet>
+                                        <p:outputLabel value="ID"/>
+                                        <p:inputText value="#{controleVacinacao.objeto.id}" size="5" readonly="true"/>
+                                        <p:outputLabel value="Nome" for="txtNomeVac"/>
+                                        <p:inputText value="#{controleVacinacao.objeto.nome}" id="txtNomeVac" 
+                                                     size="100" maxlength="100" placeholder="Obrigatório"/>
+                                        <p:outputLabel value="Data Previsão" for="txtDataPervisao"/>
+                                        <p:calendar id="txtDataPervisao" value="#{controleVacinacao.objeto.data_previsao}"
+                                                    mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                                            <f:converter converterId="converterCalendar"/>
+                                        </p:calendar>
+                                        <p:outputLabel value="Data Realização" for="txtDataRealizacao"/>
+                                        <p:calendar id="txtDataRealizacao" value="#{controleVacinacao.objeto.data_realizacao}"
+                                                    mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                                            <f:converter converterId="converterCalendar"/>
+                                        </p:calendar>
+                                        <p:outputLabel value="Unidade" for="txtUnidade"/>
+                                        <p:inputText value="#{controleVacinacao.objeto.unidade}" id="txtUnidade" 
+                                                     size="100" maxlength="100" placeholder="Obrigatório"/>
+                                        <p:outputLabel value="Profissional" for="txtProfissional"/>
+                                        <p:inputText value="#{controleVacinacao.objeto.profissional}" id="txtProfissional" 
+                                                     size="100" maxlength="100" placeholder="Obrigatório"/>
+                                    </p:panelGrid>
+                                </div>
+                            </p:dataTable>
+                        </p:tab>
                     </p:tabView>
                     <ui:include src="/templates/ajaxstatus.xhtml"/>
                 </h:form>
             </p:dialog>
-            
+            <p:dialog header="Seleção de Vacinas" widgetVar="dlgVacinas" resizable="false" modal="true">
+                <h:form id="formVacina">
+                    <p:growl/>
+                    <p:panelGrid columns="2">
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:outputLabel value="Vacina" for="selectVacina"/>
+                                <p:selectOneMenu id="selectVacina" value="#{controleIdade.vacina}">
+                                    <f:converter converterId="converterVacina"/>
+                                    <f:selectItem noSelectionOption="true" itemLabel="Selecione uma vacina"/>
+                                    <f:selectItems value="#{controleVacinacao.dao.listaTodos}"
+                                                   var="v" itemLabel="#{v.nome}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton id="btnSalvarVacina" value="Salvar"
+                                                 icon="ui-icon-disk"
+                                                 actionListener="#{controleVacinacao.salvar()}"
+                                                 update=":formEdicao:tab:listaVacinacao formVacina"
+                                                 process="@form"
+                                                 oncomplete="if(!args.validationFailed) {PF('dlgVacinas').hide();}"/>
+                            </div>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>

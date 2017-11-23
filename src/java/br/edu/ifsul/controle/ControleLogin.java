@@ -53,7 +53,7 @@ public class ControleLogin implements Serializable{
 		  Util.mensagemErro("Erro ao persistir acesso do usuário: " + e.getMessage());
 	      }
 	      Util.mensagemInformacao("Login efetuado com sucesso");
-	      return "/templates/template";
+	      return "/privado/crianca/listar.xhtml";
 	  } else {
 	      Util.mensagemErro("Usuário ou senha inválidos");
 	      return "/login";
