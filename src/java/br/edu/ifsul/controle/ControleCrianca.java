@@ -51,6 +51,9 @@ public class ControleCrianca implements Serializable{
         }
     }
     
+    public void novaVacina(){
+        vacinacao = new Vacinacao();
+    }
     
     public void adicionarVacinacao(){
         if(vacina != null){
