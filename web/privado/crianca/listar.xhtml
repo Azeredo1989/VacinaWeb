@@ -120,80 +120,80 @@
                             </div>
                         </p:tab>
                         <p:tab title="Vacinação">
-                            <p:dataTable value="#{controleCrianca.daoVacinacao.listaObjetos}" var="vac"
+                            <p:dataTable value="#{controleCrianca.objeto.vacinacao}" var="vac"
                                          rowIndexVar="idx" id="listaVacinas">
                                 <f:facet name="header">
                                     <p:commandButton value="Nova" action="#{controleCrianca.novaVacina()}"
-                                 icon="ui-icon-plus" oncomplete="PF('dlgVacinacao').show();"
-                                 update=":formVacinacao"/>
-                            </f:facet>
+                                                     icon="ui-icon-plus" oncomplete="PF('dlgVacinacao').show();"
+                                                     update=":formVacinacao"/>
+                                </f:facet>
 
-                            <p:column headerText="ID">
-                                <p:outputLabel value="#{vac.id}"/>
-                            </p:column>
-                            <p:column headerText="Nome">
-                                <p:outputLabel value="#{vac.nome}"/>
-                            </p:column>
-                            <p:column headerText="Data Previsão">
-                                <p:outputLabel value="#{vac.data_previsao}">
-                                    <f:converter converterId="converterCalendar"/>
-                                </p:outputLabel>
-                            </p:column>
-                            <p:column headerText="Data Realização">
-                                <p:outputLabel value="#{vac.data_realizacao}">
-                                    <f:converter converterId="converterCalendar"/>
-                                </p:outputLabel>
-                            </p:column>
-                            <p:column headerText="Unidade">
-                                <p:outputLabel value="#{vac.unidade}"/>
-                            </p:column>
-                            <p:column headerText="Profissional">
-                                <p:outputLabel value="#{vac.profissional}"/>
-                            </p:column>
-                        </p:dataTable>
-                    </p:tab>
-                </p:tabView>
-                <ui:include src="/templates/ajaxstatus.xhtml"/>
-            </h:form>
-        </p:dialog>
-        <p:dialog widgetVar="dlgVacinacao" header="Edição de Vacinação" modal="true" resizable="false" width="60%" height="450">
-            <h:form id="formVacinacao">
-                <div align="center">
-                    <p:panelGrid columns="2">
-                        <f:facet name="footer">
-                            <div align="center">
-                                <p:commandButton value="Salvar"
-                                                 icon="ui-icon-disk"
-                                                 actionListener="#{controleCrianca.salvar()}"
-                                                 oncomplete="if(!args.validationFailed){PF('dlgVacinacao').hide();}"
-                                                 update=":formEdicao :formListagem"/>
-                            </div>
-                        </f:facet>
-                        <p:outputLabel value="ID"/>
-                        <p:inputText value="#{controleVacinacao.objeto.id}" size="5" readonly="true"/>
-                        <p:outputLabel value="Nome" for="txtNomeVac"/>
-                        <p:inputText value="#{controleCrianca.vacinacao.nome}" id="txtNomeVac" 
-                                     size="100" maxlength="100" placeholder="Obrigatório"/>
-                        <p:outputLabel value="Data Previsão" for="txtDataPervisao"/>
-                        <p:calendar id="txtDataPervisao" value="#{controleCrianca.vacinacao.data_previsao}"
-                                    mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
-                            <f:converter converterId="converterCalendar"/>
-                        </p:calendar>
-                        <p:outputLabel value="Data Realização" for="txtDataRealizacao"/>
-                        <p:calendar id="txtDataRealizacao" value="#{controleCrianca.vacinacao.data_realizacao}"
-                                    mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
-                            <f:converter converterId="converterCalendar"/>
-                        </p:calendar>
-                        <p:outputLabel value="Unidade" for="txtUnidade"/>
-                        <p:inputText value="#{controleCrianca.vacinacao.unidade}" id="txtUnidade" 
-                                     size="100" maxlength="100"/>
-                        <p:outputLabel value="Profissional" for="txtProfissional"/>
-                        <p:inputText value="#{controleVacinacao.objeto.profissional}" id="txtProfissional" 
-                                     size="100" maxlength="100"/>
-                    </p:panelGrid>
-                </div>
-            </h:form>
-        </p:dialog>
-    </ui:define>
-</ui:composition>
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{vac.id}"/>
+                                </p:column>
+                                <p:column headerText="Nome">
+                                    <p:outputLabel value="#{vac.nome}"/>
+                                </p:column>
+                                <p:column headerText="Data Previsão">
+                                    <p:outputLabel value="#{vac.data_previsao}">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Data Realização">
+                                    <p:outputLabel value="#{vac.data_realizacao}">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Unidade">
+                                    <p:outputLabel value="#{vac.unidade}"/>
+                                </p:column>
+                                <p:column headerText="Profissional">
+                                    <p:outputLabel value="#{vac.profissional}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                    <ui:include src="/templates/ajaxstatus.xhtml"/>
+                </h:form>
+            </p:dialog>
+            <p:dialog widgetVar="dlgVacinacao" header="Edição de Vacinação" modal="true" resizable="false" width="60%" height="450">
+                <h:form id="formVacinacao">
+                    <div align="center">
+                        <p:panelGrid columns="2">
+                            <f:facet name="footer">
+                                <div align="center">
+                                    <p:commandButton value="Salvar"
+                                                     icon="ui-icon-disk"
+                                                     actionListener="#{controleCrianca.salvarVacina()}"
+                                                     oncomplete="if(!args.validationFailed){PF('dlgVacinacao').hide();}"
+                                                     update=":formEdicao :formListagem :formVacinacao"/>
+                                </div>
+                            </f:facet>
+                            <p:outputLabel value="ID"/>
+                            <p:inputText value="#{controleCrianca.vacinacao.id}" size="5" readonly="true"/>
+                            <p:outputLabel value="Nome" for="txtNomeVac"/>
+                            <p:inputText value="#{controleCrianca.vacinacao.nome}" id="txtNomeVac" 
+                                         size="100" maxlength="100" placeholder="Obrigatório"/>
+                            <p:outputLabel value="Data Previsão" for="txtDataPervisao"/>
+                            <p:calendar id="txtDataPervisao" value="#{controleCrianca.vacinacao.data_previsao}"
+                                        mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                                <f:converter converterId="converterCalendar"/>
+                            </p:calendar>
+                            <p:outputLabel value="Data Realização" for="txtDataRealizacao"/>
+                            <p:calendar id="txtDataRealizacao" value="#{controleCrianca.vacinacao.data_realizacao}"
+                                        mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                                <f:converter converterId="converterCalendar"/>
+                            </p:calendar>
+                            <p:outputLabel value="Unidade" for="txtUnidade"/>
+                            <p:inputText value="#{controleCrianca.vacinacao.unidade}" id="txtUnidade" 
+                                         size="100" maxlength="100"/>
+                            <p:outputLabel value="Profissional" for="txtProfissional"/>
+                            <p:inputText value="#{controleCrianca.vacinacao.profissional}" id="txtProfissional" 
+                                         size="100" maxlength="100"/>
+                        </p:panelGrid>
+                    </div>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
 </html>
