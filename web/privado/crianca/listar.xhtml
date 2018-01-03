@@ -171,9 +171,14 @@
                             </f:facet>
                             <p:outputLabel value="ID"/>
                             <p:inputText value="#{controleCrianca.vacinacao.id}" size="5" readonly="true"/>
-                            <p:outputLabel value="Nome" for="txtNomeVac"/>
-                            <p:inputText value="#{controleCrianca.vacinacao.nome}" id="txtNomeVac" 
-                                         size="100" maxlength="100" placeholder="Obrigatório"/>
+                            <p:outputLabel value="Nome" for="selectVacina"/>
+                            <p:selectOneMenu id="selectVacina" value="#{controleCrianca.vacina}">
+                                <f:converter converterId="converterVacina"/>
+                                <f:selectItem noSelectionOption="true"
+                                                      itemLabel="Selecione um registro"/>
+                                <f:selectItems value="#{controleCrianca.daoVacina.listaTodos}"
+                                                       var="v" itemLabel="#{v.nome}"/>
+                            </p:selectOneMenu>
                             <p:outputLabel value="Data Previsão" for="txtDataPervisao"/>
                             <p:calendar id="txtDataPervisao" value="#{controleCrianca.vacinacao.data_previsao}"
                                         mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
